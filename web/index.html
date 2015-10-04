@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome</title>
+  <script src="js/jquery-2.1.4.min.js"></script>
+</head>
+<body>
+<script type="application/javascript">
+  $.getJSON("api/pets", function (data) {
+    var trHTML = '';
+    $.each(data, function (index, value) {
+      trHTML  += '<tr>' +
+                      '<td>' + value.name + '</td>' +
+                      '<td>' + value.price + '</td>' +
+                      '<td>' + value.category + '</td>' +
+                      '<td><button id="update" onclick="updatePet('+value.id + ')">Update</button></td>' +
+                      '<td><button id="delete" onclick="deletePet('+value.id + ')">Delete</button></td>' +
+                '</tr>';
+    });
+
+    $('#pets_table').append(trHTML);
+  });
+
+
+  function deletePet(id){
+    console.log('here delete id = ' + id);
+  }
+
+  $(document).ready(function () {
+    $(deletePet()(function () {
+      var id = $(deletePet(id)).val();
+      var data = JSON.stringify(id);
+      console.log("send - " + data);
+      $.ajax({
+        type: "DELETE",
+        url: "api/books",
+        data: data,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+      })
+
+    }));
+  });
+
+
+  $(document).ready(function () {
+    $("#btn_create").click(function () {
+      var name = $('input[name="name"]').val();
+      var price = $('input[name="price"]').val();
+      var category = $('input[name="category"]').val();
+      var pet = {
+        name : name,
+        price : price,
+        category : category
+      };
+      var data = JSON.stringify(pet);
+      console.log("send - " + data);
+      $.ajax({
+        type: "POST",
+        url: "api/pets",
+        data: data,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(value){
+          var trHTML = '<tr><td>' + value.name + '</td><td>' + value.price + '</td><td>' + value.category + '</td></tr>';
+          $('#pets_table').append(trHTML);
+        }
+      });
+    });
+  });
+</script>
+<table id="pets_table" border='1'>
+  <tr>
+    <th>Name</th>
+    <th>Price</th>
+    <th>Category</th>
+    <th>Update</th>
+    <th>Delete</th>
+  </tr>
+</table>
+
+<form id="create_form">
+  <p>Name of pet : </p>
+  <input type="text" name="name"/>
+  <p>Price : </p>
+  <input type="text" name="price"/>
+  <p>Category : </p>
+  <input type="text" name="category"/>
+</form>
+<br/>
+<button id="btn_create">Create</button>
+</body>
+</html>
