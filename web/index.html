@@ -11,37 +11,31 @@
     var trHTML = '';
     $.each(data, function (index, value) {
       trHTML  += '<tr>' +
-                      '<td>' + value.name + '</td>' +
-                      '<td>' + value.price + '</td>' +
-                      '<td>' + value.category + '</td>' +
-                      '<td><button id="update" onclick="updatePet('+value.id + ')">Update</button></td>' +
-                      '<td><button id="delete" onclick="deletePet('+value.id + ')">Delete</button></td>' +
+                      '<td class="name">' + value.name + '</td>' +
+                      '<td class="price">' + value.price + '</td>' +
+                      '<td class="category">' + value.category + '</td>' +
+                      '<td><button class="edit" onclick="editPet('+value.id + ')">Edit</button></td>' +
+                      '<td><button id="delete('+value.id + ')" onclick="deletePet('+value.id + ')">Delete</button></td>' +
                 '</tr>';
     });
 
     $('#pets_table').append(trHTML);
   });
 
-
-  function deletePet(id){
-    console.log('here delete id = ' + id);
+  function deletePet(id) {
+    console.log("here delete id = " + id);
+    $.ajax({
+      url: 'api/pets/' + id,
+      type: 'DELETE',
+      success: function(result) {
+        console.log('Pet ' + result.name + ' deleted.');
+          var num_tr=id.parentNode.parentNode.sectionRowIndex
+          document.getElementById("pets_table").tBodies[0].deleteRow(num_tr)
+      }
+    });
   }
 
-  $(document).ready(function () {
-    $(deletePet()(function () {
-      var id = $(deletePet(id)).val();
-      var data = JSON.stringify(id);
-      console.log("send - " + data);
-      $.ajax({
-        type: "DELETE",
-        url: "api/books",
-        data: data,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-      })
 
-    }));
-  });
 
 
   $(document).ready(function () {
@@ -63,7 +57,13 @@
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function(value){
-          var trHTML = '<tr><td>' + value.name + '</td><td>' + value.price + '</td><td>' + value.category + '</td></tr>';
+          var trHTML = '<tr>' +
+                          '<td class="name">' + value.name + '</td>' +
+                          '<td class="price">' + value.price + '</td>' +
+                          '<td class="category">' + value.category + '</td>' +
+                          '<td><button class="edit" onclick="editPet('+value.id + ')">Edit</button></td>' +
+                          '<td><button id="delete('+value.id + ')" onclick="deletePet('+value.id + ')">Delete</button></td>' +
+                       '</tr>';
           $('#pets_table').append(trHTML);
         }
       });
@@ -75,20 +75,21 @@
     <th>Name</th>
     <th>Price</th>
     <th>Category</th>
-    <th>Update</th>
+    <th>Edit</th>
     <th>Delete</th>
   </tr>
 </table>
 
 <form id="create_form">
   <p>Name of pet : </p>
-  <input type="text" name="name"/>
+  <input id="input_name" type="text" name="name"/>
   <p>Price : </p>
-  <input type="text" name="price"/>
+  <input id="input_price" type="text" name="price"/>
   <p>Category : </p>
-  <input type="text" name="category"/>
+  <input id="input_category" type="text" name="category"/>
 </form>
 <br/>
 <button id="btn_create">Create</button>
+<button id="btn_update" hidden="hidden" >Update</button>
 </body>
 </html>

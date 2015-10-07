@@ -4,14 +4,21 @@ package entity;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import javax.persistence.*;
 
+
+@Entity
+@Table(name="pets")
 @XmlRootElement(name = "pet")
 public class Pet {
 
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "my_sequence")
+    @Column(name = "id")
     @XmlElement
     private int id;
 
+    @Column(name = "name", nullable = false)
     @XmlElement
     private String name;
 

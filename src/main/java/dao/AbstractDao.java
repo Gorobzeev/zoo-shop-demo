@@ -15,6 +15,4 @@ public interface AbstractDao <T> {
 
     T add(T item);
 
-
-
 }

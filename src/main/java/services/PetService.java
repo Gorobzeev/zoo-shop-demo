@@ -1,6 +1,7 @@
 package services;
 
 import dao.FacadeDao;
+import dao.StorageRepositories;
 import entity.Pet;
 
 import javax.ws.rs.*;
@@ -15,11 +16,9 @@ public class PetService {
     @GET
     @Produces("application/json")
     public Response getAll() {
-        FacadeDao facade = new FacadeDao();
-        List<Pet> pets = facade.getPetDao().loadAll();
-        facade.closeSqlConnection();
+        StorageRepositories session = StorageRepositories.getInstance();
+        List<Pet> pets = session.getPetRepository().findAll();
         return Response.ok(pets, MediaType.APPLICATION_JSON_TYPE).build();
-
     }
 
 
