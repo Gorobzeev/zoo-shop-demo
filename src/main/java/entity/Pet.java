@@ -12,8 +12,7 @@ import javax.persistence.*;
 @XmlRootElement(name = "pet")
 public class Pet {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "my_sequence")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     @XmlElement
     private int id;
@@ -22,9 +21,11 @@ public class Pet {
     @XmlElement
     private String name;
 
+    @Column(name = "price")
     @XmlElement
     private int price;
 
+    @Column(name = "category")
     @XmlElement
     private String category;
 

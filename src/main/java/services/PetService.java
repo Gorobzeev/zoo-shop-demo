@@ -47,9 +47,8 @@ public class PetService {
     @Consumes("application/json")
     @Produces("application/json")
     public Response update(Pet itemToUpdate) {
-        FacadeDao facade = new FacadeDao();
-        boolean updated = facade.getPetDao().update(itemToUpdate);
-        facade.closeSqlConnection();
-        return Response.ok(updated, MediaType.APPLICATION_JSON_TYPE).build();
+        StorageRepositories session = StorageRepositories.getInstance();
+        Pet newPet = session.getPetRepository().update(itemToUpdate);
+        return Response.ok(newPet, MediaType.APPLICATION_JSON_TYPE).build();
     }
 }
