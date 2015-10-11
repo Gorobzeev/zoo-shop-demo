@@ -11,7 +11,7 @@ public interface AbstractDao <T> {
 
     boolean delete(T item);
 
-    boolean update(T changed);
+    T update(T changed);
 
     T add(T item);
 

@@ -1,6 +1,8 @@
 package dao;
 
 import entity.Pet;
+
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -16,18 +18,20 @@ public class PetRepository {
             this.sessionFactory = sessionFactory;
         }
 
-        public void create(Pet item){
+        public Pet create(Pet item){
             Session session = sessionFactory.getCurrentSession();
             session.beginTransaction();
             session.save(item);
             session.getTransaction().commit();
+            return item;
         }
 
-        public void update(Pet item){
-            Session session = sessionFactory.getCurrentSession();
-            session.beginTransaction();
-            session.update(item);
-            session.getTransaction().commit();
+        public Pet update(Pet item){
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        session.update(item);
+        session.getTransaction().commit();
+        return item;
         }
 
         public void delete(Pet item){
@@ -45,4 +49,12 @@ public class PetRepository {
             return result;
         }
 
+    public Pet findById(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        Query query = session.createQuery("from Pet where id = :id").setParameter("id", id);
+        Pet result = (Pet) query.iterate().next();
+        session.getTransaction().commit();
+        return result;
+    }
 }

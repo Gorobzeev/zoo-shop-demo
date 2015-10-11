@@ -80,7 +80,7 @@ public class PetDao implements AbstractDao<Pet> {
     }
 
     @Override
-    public boolean update(Pet changed) {
+    public Pet update(Pet changed) {
         try {
             statement.executeUpdate("UPDATE " + TABLE_NAME + " SET "
                     + COLUMN_NAME + "='" + changed.getName() + "',"
@@ -89,9 +89,8 @@ public class PetDao implements AbstractDao<Pet> {
                     + "' WHERE " + COLUMN_ID + "=" + changed.getId() + ";");
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
-        return true;
+        return changed;
     }
 
     @Override

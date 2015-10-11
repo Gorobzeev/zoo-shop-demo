@@ -26,9 +26,8 @@ public class PetService {
     @Consumes("application/json")
     @Produces("application/json")
     public Response add(Pet itemToAdd) {
-        FacadeDao facade = new FacadeDao();
-        Pet pet = facade.getPetDao().add(itemToAdd);
-        facade.closeSqlConnection();
+        StorageRepositories session = StorageRepositories.getInstance();
+        Pet pet = session.getPetRepository().create(itemToAdd);
         return Response.ok(pet, MediaType.APPLICATION_JSON_TYPE).build();
     }
 
@@ -37,10 +36,9 @@ public class PetService {
     @DELETE
     @Produces("application/json")
     public Response delete(@PathParam("id") int id) {
-        FacadeDao facadeDao = new FacadeDao();
-        Pet pet = facadeDao.getPetDao().findById(id);
-        facadeDao.getPetDao().delete(pet);
-        facadeDao.closeSqlConnection();
+        StorageRepositories session = StorageRepositories.getInstance();
+        Pet pet = session.getPetRepository().findById(id);
+        session.getPetRepository().delete(pet);
         return Response.ok(pet, MediaType.APPLICATION_JSON_TYPE).build();
     }
 
